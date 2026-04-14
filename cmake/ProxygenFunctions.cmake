@@ -26,11 +26,11 @@ set_property(GLOBAL PROPERTY PROXYGEN_GRANULAR_INTERFACE_TARGETS)
 #   )
 function(proxygen_add_library _target_name)
   cmake_parse_arguments(
-    PROXYGEN_LIB
-    "EXCLUDE_FROM_MONOLITH"         # Options (boolean flags)
-    ""                              # Single-value args
-    "SRCS;DEPS;EXPORTED_DEPS"       # Multi-value args
-    ${ARGN}
+          PROXYGEN_LIB
+          "EXCLUDE_FROM_MONOLITH"         # Options (boolean flags)
+          ""                              # Single-value args
+          "SRCS;DEPS;EXPORTED_DEPS"       # Multi-value args
+          ${ARGN}
   )
 
   set(_sources ${PROXYGEN_LIB_SRCS})
@@ -48,10 +48,10 @@ function(proxygen_add_library _target_name)
     # Header-only: create INTERFACE library
     add_library(${_target_name} INTERFACE)
     target_include_directories(${_target_name}
-      INTERFACE
-        $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
-        $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
-        $<INSTALL_INTERFACE:include/>
+            INTERFACE
+            $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
+            $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
+            $<INSTALL_INTERFACE:include/>
     )
 
     # Link exported deps for INTERFACE libraries
@@ -77,20 +77,20 @@ function(proxygen_add_library _target_name)
     set_property(TARGET ${_obj_target} PROPERTY VERSION ${PACKAGE_VERSION})
   endif()
 
-  if(BUILD_SHARED_LIBS)
-    set_property(TARGET ${_obj_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
-  endif()
+  #  if(BUILD_SHARED_LIBS)
+  set_property(TARGET ${_obj_target} PROPERTY POSITION_INDEPENDENT_CODE ON)
+  #  endif()
 
   target_include_directories(${_obj_target}
-    PUBLIC
-      $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
-      $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
-      $<INSTALL_INTERFACE:include/>
+          PUBLIC
+          $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
+          $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
+          $<INSTALL_INTERFACE:include/>
   )
 
   target_compile_options(${_obj_target}
-    PRIVATE
-    ${_PROXYGEN_COMMON_COMPILE_OPTIONS}
+          PRIVATE
+          ${_PROXYGEN_COMMON_COMPILE_OPTIONS}
   )
 
   target_compile_features(${_obj_target} PUBLIC cxx_std_20)
@@ -135,7 +135,7 @@ function(proxygen_add_library _target_name)
   if(_proxygen_deps)
     list(JOIN _proxygen_deps "," _deps_str)
     set_property(GLOBAL APPEND PROPERTY PROXYGEN_DEFERRED_DEPS
-      "${_obj_target}|PUBLIC|${_deps_str}"
+            "${_obj_target}|PUBLIC|${_deps_str}"
     )
   endif()
   if(PROXYGEN_LIB_DEPS)
@@ -157,7 +157,7 @@ function(proxygen_add_library _target_name)
     if(_private_proxygen_deps)
       list(JOIN _private_proxygen_deps "," _deps_str)
       set_property(GLOBAL APPEND PROPERTY PROXYGEN_DEFERRED_DEPS
-        "${_obj_target}|PRIVATE|${_deps_str}"
+              "${_obj_target}|PRIVATE|${_deps_str}"
       )
     endif()
   endif()
@@ -173,10 +173,10 @@ function(proxygen_add_library _target_name)
     add_library(${_target_name} INTERFACE)
 
     target_include_directories(${_target_name}
-      INTERFACE
-        $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
-        $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
-        $<INSTALL_INTERFACE:include/>
+            INTERFACE
+            $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
+            $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
+            $<INSTALL_INTERFACE:include/>
     )
 
     # Track this target to link to proxygen after monolithic library is created
@@ -193,10 +193,10 @@ function(proxygen_add_library _target_name)
     endif()
 
     target_include_directories(${_target_name}
-      PUBLIC
-        $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
-        $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
-        $<INSTALL_INTERFACE:include/>
+            PUBLIC
+            $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
+            $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
+            $<INSTALL_INTERFACE:include/>
     )
 
     target_compile_features(${_target_name} PUBLIC cxx_std_20)
@@ -215,7 +215,7 @@ function(proxygen_add_library _target_name)
     if(_proxygen_deps)
       list(JOIN _proxygen_deps "," _deps_str)
       set_property(GLOBAL APPEND PROPERTY PROXYGEN_DEFERRED_DEPS
-        "${_target_name}|PUBLIC|${_deps_str}"
+              "${_target_name}|PUBLIC|${_deps_str}"
       )
     endif()
     if(PROXYGEN_LIB_DEPS)
@@ -234,16 +234,16 @@ function(proxygen_add_library _target_name)
       if(_priv_prox)
         list(JOIN _priv_prox "," _deps_str)
         set_property(GLOBAL APPEND PROPERTY PROXYGEN_DEFERRED_DEPS
-          "${_target_name}|PRIVATE|${_deps_str}"
+                "${_target_name}|PRIVATE|${_deps_str}"
         )
       endif()
     endif()
 
     install(
-      TARGETS ${_target_name}
-      EXPORT proxygen-exports
-      LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-      ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
+            TARGETS ${_target_name}
+            EXPORT proxygen-exports
+            LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+            ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
     )
   else()
     # For static builds: create STATIC library
@@ -254,10 +254,10 @@ function(proxygen_add_library _target_name)
     endif()
 
     target_include_directories(${_target_name}
-      PUBLIC
-        $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
-        $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
-        $<INSTALL_INTERFACE:include/>
+            PUBLIC
+            $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
+            $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
+            $<INSTALL_INTERFACE:include/>
     )
 
     target_compile_features(${_target_name} PUBLIC cxx_std_20)
@@ -276,7 +276,7 @@ function(proxygen_add_library _target_name)
     if(_proxygen_deps)
       list(JOIN _proxygen_deps "," _deps_str)
       set_property(GLOBAL APPEND PROPERTY PROXYGEN_DEFERRED_DEPS
-        "${_target_name}|PUBLIC|${_deps_str}"
+              "${_target_name}|PUBLIC|${_deps_str}"
       )
     endif()
     if(PROXYGEN_LIB_DEPS)
@@ -295,16 +295,16 @@ function(proxygen_add_library _target_name)
       if(_priv_prox)
         list(JOIN _priv_prox "," _deps_str)
         set_property(GLOBAL APPEND PROPERTY PROXYGEN_DEFERRED_DEPS
-          "${_target_name}|PRIVATE|${_deps_str}"
+                "${_target_name}|PRIVATE|${_deps_str}"
         )
       endif()
     endif()
 
     install(
-      TARGETS ${_target_name}
-      EXPORT proxygen-exports
-      LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-      ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
+            TARGETS ${_target_name}
+            EXPORT proxygen-exports
+            LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+            ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
     )
   endif()
 
@@ -353,29 +353,29 @@ function(proxygen_create_monolithic_library)
   endif()
 
   target_include_directories(proxygen
-    PUBLIC
-      $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
-      $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
-      $<INSTALL_INTERFACE:include/>
+          PUBLIC
+          $<BUILD_INTERFACE:${PROXYGEN_FBCODE_ROOT}>
+          $<BUILD_INTERFACE:${PROXYGEN_GENERATED_ROOT}>
+          $<INSTALL_INTERFACE:include/>
   )
 
   target_compile_features(proxygen PUBLIC cxx_std_20)
 
   # Link all dependencies
   target_link_libraries(proxygen
-    PUBLIC
-      Folly::folly
-      fizz::fizz
-      wangle::wangle
-      ${ZSTD_LIBRARIES}
-      ZLIB::ZLIB
-      ${OPENSSL_LIBRARIES}
-      Threads::Threads
-      cares
-    PRIVATE
-      glog::glog
-      ${GFLAG_DEPENDENCIES}
-      ${CMAKE_DL_LIBS}
+          PUBLIC
+          Folly::folly
+          fizz::fizz
+          wangle::wangle
+          ${ZSTD_LIBRARIES}
+          ZLIB::ZLIB
+          ${OPENSSL_LIBRARIES}
+          Threads::Threads
+          cares
+          PRIVATE
+          glog::glog
+          ${GFLAG_DEPENDENCIES}
+          ${CMAKE_DL_LIBS}
   )
 
   # Create alias for consistency
