@@ -12,7 +12,7 @@ add_subdirectory(external)
 add_subdirectory(lib)
 add_subdirectory(httpserver)
 add_subdirectory(httpclient)
-add_subdirectory(fuzzers)
+#add_subdirectory(fuzzers)
 
 # =============================================================================
 # Backwards compatibility aliases for downstream projects
